@@ -113,7 +113,7 @@ selectNodeVersion
 echo "Installing root npm pachages"
  if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
    cd "$DEPLOYMENT_TARGET"
-   eval $NPM_CMD install --production
+   eval $NPM_CMD install
    exitWithMessageOnError "npm failed"
    cd - > /dev/null
  fi
@@ -127,7 +127,7 @@ for dir in ./*
     if [ -e "./package.json" ]
       echo $dir
       then 
-        eval $NPM_CMD install --production
+        eval $NPM_CMD install
         exitWithMessageOnError "npm install failed"
         cd $DEPLOYMENT_TARGET
       fi
@@ -142,7 +142,7 @@ for dir in ./*
     if [ -e "./package.json" ]
       echo "Running tests in " $dir
       then 
-        eval $NPM_CMD test --production
+        eval $NPM_CMD test
         exitWithMessageOnError "npm test failed"
         cd $DEPLOYMENT_TARGET
       fi
