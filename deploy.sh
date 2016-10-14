@@ -110,6 +110,7 @@ fi
 selectNodeVersion
 
 # 3. Install npm packages
+echo "Installing root npm pachages"
  if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
    cd "$DEPLOYMENT_TARGET"
    eval $NPM_CMD install --production
@@ -118,11 +119,12 @@ selectNodeVersion
  fi
 
 # 4. Install npm packages in subdirectories
+echo "Installing npm packages in subdirectories"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-    echo $dir
     if [ -e "./package.json" ]
+      echo $dir
       then 
         eval $NPM_CMD install --prefix $dir --production
         exitWithMessageOnError "npm failed"
@@ -130,13 +132,14 @@ for dir in ./*
 done
 
 # 5. Run tests
+echo "Running tests"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-    echo $dir
     if [ -e "./package.json" ]
+      echo $dir
       then 
-        eval $NPM_CMD test --prefix $dir --production
+        eval $NPM_CMD test --prefix $dir
         exitWithMessageOnError "npm test failed"
       fi
 done
