@@ -123,12 +123,13 @@ echo "Installing npm packages in subdirectories"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-    echo $DEPLOYMENT_TARGET/$dir/package.json
-    if [ -e "$DEPLOYMENT_TARGET/$dir/package.json" ]
+    cd $dir
+    if [ -e "./package.json" ]
       echo $dir
       then 
-        eval $NPM_CMD install --prefix $dir --production
-        exitWithMessageOnError "npm failed"
+        eval $NPM_CMD install --production
+        exitWithMessageOnError "npm install failed"
+        cd $DEPLOYMENT_TARGET
       fi
 done
 
@@ -137,14 +138,16 @@ echo "Running tests"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-  echo $DEPLOYMENT_TARGET/$dir/package.json
-    if [ -e "$DEPLOYMENT_TARGET/$dir/package.json" ]
+    cd $dir
+    if [ -e "./package.json" ]
       echo $dir
       then 
-        eval $NPM_CMD test --prefix $dir
+        eval $NPM_CMD test --production
         exitWithMessageOnError "npm test failed"
+        cd $DEPLOYMENT_TARGET
       fi
 done
+
 
 
 ##################################################################################################################################
