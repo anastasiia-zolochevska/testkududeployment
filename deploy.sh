@@ -109,15 +109,37 @@ fi
 # 2. Select node version
 selectNodeVersion
 
-echo hello
 # 3. Install npm packages
-cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && $NPM_CMD install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
+ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
+   cd "$DEPLOYMENT_TARGET"
+   eval $NPM_CMD install --production
+   exitWithMessageOnError "npm failed"
+   cd - > /dev/null
+ fi
 
-echo yay
-# 4. Run tests
+# 4. Install npm packages in subdirectories
 cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && $NPM_CMD test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
+for dir in ./*
+  do     
+    echo $dir
+    if [ -e "./package.json" ]
+      then 
+        eval $NPM_CMD install --prefix $dir --production
+        exitWithMessageOnError "npm failed"
+      fi
+done
+
+# 5. Run tests
+cd $DEPLOYMENT_TARGET
+for dir in ./*
+  do     
+    echo $dir
+    if [ -e "./package.json" ]
+      then 
+        eval $NPM_CMD test --prefix $dir --production
+        exitWithMessageOnError "npm test failed"
+      fi
+done
 
 
 ##################################################################################################################################
