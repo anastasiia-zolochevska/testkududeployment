@@ -119,16 +119,24 @@ fi
 
 # 4. Install npm packages in subfolders
 cd "$DEPLOYMENT_TARGET"
-for D in $(. -mindepth 1 -maxdepth 1 -type d) ; do
-    eval $NPM_CMD --prefix $D install --production
+for path in . 
+do
+    [ -d "${path}" ] || continue # if not a directory, skip
+    dirname="$(basename "${path}")"
+    echo dirname
+    eval $NPM_CMD --prefix dirname install --production
     exitWithMessageOnError "npm failed"
     cd - > /dev/null
 done
 
 # 5. Run tests
 cd "$DEPLOYMENT_TARGET"
-for D in $(. -mindepth 1 -maxdepth 1 -type d) ; do
-    eval $NPM_CMD --prefix $D install --production
+for path in . 
+do
+    [ -d "${path}" ] || continue # if not a directory, skip
+    dirname="$(basename "${path}")"
+    echo dirname
+    eval $NPM_CMD --prefix dirname test --production
     exitWithMessageOnError "npm test failed"
     cd - > /dev/null
 done
