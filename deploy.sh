@@ -118,19 +118,17 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
 fi
 
 # 4. Install npm packages in subfolders
-for dir in "$DEPLOYMENT_TARGET"
-do
-    cd "$DEPLOYMENT_TARGET"/$dir
-    eval $NPM_CMD install --production
+cd "$DEPLOYMENT_TARGET"
+for D in $(. -mindepth 1 -maxdepth 1 -type d) ; do
+    eval $NPM_CMD --prefix $D install --production
     exitWithMessageOnError "npm failed"
     cd - > /dev/null
 done
 
 # 5. Run tests
-for dir in "$DEPLOYMENT_TARGET"
-do
-    cd "$DEPLOYMENT_TARGET"/$dir
-    eval $NPM_CMD test
+cd "$DEPLOYMENT_TARGET"
+for D in $(. -mindepth 1 -maxdepth 1 -type d) ; do
+    eval $NPM_CMD --prefix $D install --production
     exitWithMessageOnError "npm test failed"
     cd - > /dev/null
 done
