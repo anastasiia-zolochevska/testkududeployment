@@ -111,11 +111,11 @@ selectNodeVersion
 
 # 3. Install npm packages
 cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && npm install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && npm install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
 
 # 4. Run tests
 cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && npm test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && npm test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
 
 
 ##################################################################################################################################
