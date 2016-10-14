@@ -110,36 +110,11 @@ fi
 selectNodeVersion
 
 # 3. Install npm packages
-if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
-  cd "$DEPLOYMENT_TARGET"
-  eval $NPM_CMD install --production
-  exitWithMessageOnError "npm failed"
-  cd - > /dev/null
-fi
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && npm install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
 
-# 4. Install npm packages in subfolders
-cd "$DEPLOYMENT_TARGET"
-for path in . 
-do
-    [ -d "${path}" ] || continue # if not a directory, skip
-    dirname="$(basename "${path}")"
-    echo dirname
-    eval $NPM_CMD --prefix dirname install --production
-    exitWithMessageOnError "npm failed"
-    cd - > /dev/null
-done
+# 4. Run tests
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && npm test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
 
-# 5. Run tests
-cd "$DEPLOYMENT_TARGET"
-for path in . 
-do
-    [ -d "${path}" ] || continue # if not a directory, skip
-    dirname="$(basename "${path}")"
-    echo dirname
-    eval $NPM_CMD --prefix dirname test --production
-    exitWithMessageOnError "npm test failed"
-    cd - > /dev/null
-done
 
 ##################################################################################################################################
 echo "Finished successfully."
