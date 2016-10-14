@@ -1,0 +1,19 @@
+﻿{
+    "disabled": false,
+    "bindings": [
+        {
+            "name": "facebookQueueItem",
+            "type": "queueTrigger",
+            "direction": "in",
+            "queueName": "rawfacebook",
+            "connection":"ochahackfest_STORAGE"
+       },
+       {
+            "name": "nlpInputQueueItem",
+            "queueName": "nlpinput",
+            "connection": "ochahackfest_STORAGE",
+            "type": "queue",
+            "direction": "out"
+        }
+    ]
+}

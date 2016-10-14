@@ -1,0 +1,19 @@
+﻿{
+    "disabled": false,
+    "bindings": [
+        {
+            "name": "tweetsQueue",
+            "type": "queueTrigger",
+            "direction": "in",
+            "queueName": "rawtweets",
+            "connection":"ochahackfest_STORAGE"
+       },
+       {
+            "name": "nlpInputQueueItem",
+            "queueName": "nlpinput",
+            "connection": "ochahackfest_STORAGE",
+            "type": "queue",
+            "direction": "out"
+        }
+    ]
+}
