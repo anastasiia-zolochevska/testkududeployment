@@ -2,7 +2,7 @@
   "name": "facebook-pre-nlp-processor",
   "version": "1.0.0",
   "scripts": {
-    "test": "PORT=3035 mocha"
+    "test": "mocha"
   },
   "author": "Anastasia Zolochevska <anastasiia.zolochevska@gmail.com>",
   "dependencies": {
