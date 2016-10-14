@@ -123,7 +123,8 @@ echo "Installing npm packages in subdirectories"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-    if [ -e "./package.json" ]
+    echo $DEPLOYMENT_TARGET/$dir/package.json
+    if [ -e "$DEPLOYMENT_TARGET/$dir/package.json" ]
       echo $dir
       then 
         eval $NPM_CMD install --prefix $dir --production
@@ -136,7 +137,8 @@ echo "Running tests"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
-    if [ -e "./package.json" ]
+  echo $DEPLOYMENT_TARGET/$dir/package.json
+    if [ -e "$DEPLOYMENT_TARGET/$dir/package.json" ]
       echo $dir
       then 
         eval $NPM_CMD test --prefix $dir
