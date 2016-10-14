@@ -109,13 +109,15 @@ fi
 # 2. Select node version
 selectNodeVersion
 
+echo hello
 # 3. Install npm packages
 cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && npm install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && $NPM_CMD install --production && exitWithMessageOnError 'npm failed' && cd - > /dev/null" \;
 
+echo yay
 # 4. Run tests
 cd $DEPLOYMENT_TARGET
-find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && npm test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
+find . -maxdepth 1 -type d \( ! -name . \) -exec bash -c "cd '{}' && pwd && $NPM_CMD test && exitWithMessageOnError 'npm test failed' && cd - > /dev/null" \;
 
 
 ##################################################################################################################################
