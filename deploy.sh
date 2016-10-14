@@ -140,7 +140,7 @@ for dir in ./*
   do     
     cd $dir
     if [ -e "./package.json" ]
-      echo $dir
+      echo "Running tests in " + $dir
       then 
         eval $NPM_CMD test --production
         exitWithMessageOnError "npm test failed"
