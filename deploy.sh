@@ -135,6 +135,7 @@ done
 
 # 5. Run tests
 echo "Running tests"
+npm install -g mocha
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
@@ -142,7 +143,7 @@ for dir in ./*
     if [ -e "./package.json" ]
       echo "Running tests in " $dir
       then 
-        eval $NPM_CMD test
+        $NPM_CMD test
         exitWithMessageOnError "npm test failed"
         cd $DEPLOYMENT_TARGET
       fi
