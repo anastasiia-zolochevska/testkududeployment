@@ -135,7 +135,7 @@ done
 
 # 5. Run tests
 echo "Running tests"
-npm install -g mocha
+$NPM_CMD  install -g mocha
 cd $DEPLOYMENT_TARGET
 for dir in ./*
   do     
