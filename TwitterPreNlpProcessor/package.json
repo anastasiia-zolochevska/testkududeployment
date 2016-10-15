@@ -2,7 +2,7 @@
   "name": "twitter-pre-nlp-processor",
   "version": "1.0.0",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "/node_modules/mocha/bin/mocha"
   },
   "author": "Anastasia Zolochevska <anastasiia.zolochevska@gmail.com>",
   "dependencies": {
