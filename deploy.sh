@@ -110,7 +110,7 @@ fi
 selectNodeVersion
 
 
-# 4. Install npm packages in subdirectories
+# 3. Install npm packages in subdirectories
 echo "Installing npm packages in subdirectories"
 cd $DEPLOYMENT_TARGET
 for dir in ./*
@@ -125,7 +125,7 @@ for dir in ./*
       fi
 done
 
-# 5. Run tests
+# 4. Run tests
 echo "Running tests"
 eval $NPM_CMD  install -g mocha
 cd $DEPLOYMENT_TARGET
