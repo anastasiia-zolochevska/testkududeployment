@@ -109,14 +109,6 @@ fi
 # 2. Select node version
 selectNodeVersion
 
-# 3. Install npm packages
-echo "Installing root npm pachages"
- if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
-   cd "$DEPLOYMENT_TARGET"
-   eval $NPM_CMD install
-   exitWithMessageOnError "npm failed"
-   cd - > /dev/null
- fi
 
 # 4. Install npm packages in subdirectories
 echo "Installing npm packages in subdirectories"
