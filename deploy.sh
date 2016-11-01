@@ -98,64 +98,49 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-DEPLOYMENT_TARGET_TEMP="$(dirname "$DEPLOYMENT_TARGET")""/temp"
 echo Handling node.js deployment.
 
-# # 1. Copy current target to temp folder
-# echo cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
-# cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
-
-# # 2. KuduSync to temp folder
-# if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-# echo "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET_TEMP" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-#   "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET_TEMP" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-#   exitWithMessageOnError "Kudu Sync failed"
-# fi
-
-# 3. Select node version
+# 1. Select node version
 selectNodeVersion
 
+# 2. Install npm packages in subdirectories in temp folder
+echo "Installing npm packages in subdirectories"
+cd $DEPLOYMENT_SOURCE
+for dir in ./*
+  do     
+    cd $dir
+    if [ -e "./package.json" ]
+      echo $dir
+      then 
+        eval $NPM_CMD install
+        exitWithMessageOnError "npm install failed"
+        cd $DEPLOYMENT_SOURCE
+      fi
+done
 
-# # 4. Install npm packages in subdirectories in temp folder
-# echo "Installing npm packages in subdirectories"
-# cd $DEPLOYMENT_SOURCE
-# for dir in ./*
-#   do     
-#     cd $dir
-#     if [ -e "./package.json" ]
-#       echo $dir
-#       then 
-#         eval $NPM_CMD install
-#         exitWithMessageOnError "npm install failed"
-#         cd $DEPLOYMENT_SOURCE
-#       fi
-# done
+# 3. Run tests in temp folder
+echo "Running tests"
+eval $NPM_CMD  install -g mocha
+cd $DEPLOYMENT_SOURCE
+for dir in ./*
+  do     
+    cd $dir
+    if [ -e "./package.json" ]
+      echo "Running tests in " $dir
+      then 
+        eval $NPM_CMD test
+        exitWithMessageOnError "npm test failed"
+        cd $DEPLOYMENT_SOURCE
+      fi
+done
 
-# # 5. Run tests in temp folder
-# echo "Running tests"
-# eval $NPM_CMD  install -g mocha
-# cd $DEPLOYMENT_SOURCE
-# for dir in ./*
-#   do     
-#     cd $dir
-#     if [ -e "./package.json" ]
-#       echo "Running tests in " $dir
-#       then 
-#         eval $NPM_CMD test
-#         exitWithMessageOnError "npm test failed"
-#         cd $DEPLOYMENT_SOURCE
-#       fi
-# done
+# 4. KuduSync if tests didn't fail
 
-# # 6. Rename temp folder to target folder
-# echo mv "$DEPLOYMENT_TARGET_TEMP" "$DEPLOYMENT_TARGET"
-# mv "$DEPLOYMENT_TARGET_TEMP" "$DEPLOYMENT_TARGET"
-
-# if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-# echo "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-#   "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-#   exitWithMessageOnError "Kudu Sync failed"
-# fi
+if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
+echo "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  exitWithMessageOnError "Kudu Sync failed"
+fi
 
 
 
