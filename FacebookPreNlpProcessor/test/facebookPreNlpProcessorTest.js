@@ -80,7 +80,7 @@ describe('facebookPreNlpProcessor service', () => {
                     console.log(err);
                 }
                 assert(!err);
-                assert.equal(JSON.stringify(fbMsgQueueMessage), JSON.stringify(context.bindings.nlpInputQueueItem));
+                assert.equal("hello", JSON.stringify(context.bindings.nlpInputQueueItem));
                 done();
             },
             bindings:{}

@@ -3,7 +3,7 @@ var appInsights = require("applicationinsights");
 var appInsightsClient = appInsights.getClient();
 
 module.exports = function (context, fbMsg) {
-    context.log("hello YAY1");
+    context.log("hello YAY1222");
     appInsightsClient.trackEvent('FacebookPreNlpProcessor Azure Function has started');
     try{
         var guid = fbMsg.message.id;
