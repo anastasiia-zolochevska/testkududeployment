@@ -98,12 +98,7 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-1. Copy target to temp
-2. sync source to temp
-3. run tests
-4. rename temp to target
-
-$DEPLOYMENT_TARGET_TEMP = $(uuidgen)
+$DEPLOYMENT_TARGET_TEMP = uuidgen
 echo Handling node.js deployment.
 
 # 1. Copy current target to temp folder
