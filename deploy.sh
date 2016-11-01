@@ -99,6 +99,7 @@ selectNodeVersion () {
 # ----------
 
 guid=$uuidgen
+echo $guid
 DEPLOYMENT_TARGET_TEMP=$DEPLOYMENT_TARGET/../$guid
 echo Handling node.js deployment.
 
