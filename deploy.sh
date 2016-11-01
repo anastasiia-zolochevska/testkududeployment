@@ -98,7 +98,8 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-DEPLOYMENT_TARGET_TEMP=$ARTIFACTS/uuidgen
+guid=uuidgen
+DEPLOYMENT_TARGET_TEMP=$SCRIPT_DIR/../$guid
 echo Handling node.js deployment.
 
 # 1. Copy current target to temp folder
