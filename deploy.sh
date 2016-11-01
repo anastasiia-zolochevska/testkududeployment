@@ -98,8 +98,8 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-guid=uuidgen
-DEPLOYMENT_TARGET_TEMP=$SCRIPT_DIR/../$guid
+guid=$uuidgen
+DEPLOYMENT_TARGET_TEMP=$DEPLOYMENT_TARGET/../$guid
 echo Handling node.js deployment.
 
 # 1. Copy current target to temp folder
