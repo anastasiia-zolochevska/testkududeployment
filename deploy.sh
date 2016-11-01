@@ -98,7 +98,7 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-DEPLOYMENT_TARGET_TEMP = uuidgen
+DEPLOYMENT_TARGET_TEMP=uuidgen
 echo Handling node.js deployment.
 
 # 1. Copy current target to temp folder
