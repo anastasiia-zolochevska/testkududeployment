@@ -98,8 +98,7 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-echo $SCRIPT_DIR
-DEPLOYMENT_TARGET_TEMP=$SCRIPT_DIR/../temp
+DEPLOYMENT_TARGET_TEMP="$(dirname "$DEPLOYMENT_TARGET")"/temp
 echo Handling node.js deployment.
 
 # 1. Copy current target to temp folder
