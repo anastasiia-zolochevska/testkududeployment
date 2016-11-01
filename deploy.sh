@@ -98,12 +98,12 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-DEPLOYMENT_TARGET_TEMP="$(dirname "$DEPLOYMENT_TARGET")"\temp
+DEPLOYMENT_TARGET_TEMP="$(dirname "$DEPLOYMENT_TARGET")""/temp"
 echo Handling node.js deployment.
 
-# 1. Copy current target to temp folder
-echo cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
-cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
+# # 1. Copy current target to temp folder
+# echo cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
+# cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
 
 # 2. KuduSync to temp folder
 if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
