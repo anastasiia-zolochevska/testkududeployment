@@ -98,22 +98,32 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-echo Handling node.js deployment.
-echo "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+1. Copy target to temp
+2. sync source to temp
+3. run tests
+4. rename temp to target
 
-# 1. KuduSync
+$DEPLOYMENT_TARGET_TEMP = $(uuidgen)
+echo Handling node.js deployment.
+
+# 1. Copy current target to temp folder
+echo cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
+cp -rf "$DEPLOYMENT_TARGET" "$DEPLOYMENT_TARGET_TEMP"
+
+# 2. KuduSync to temp folder
 if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+echo "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET_TEMP" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET_TEMP" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
   exitWithMessageOnError "Kudu Sync failed"
 fi
 
-# 2. Select node version
+# 3. Select node version
 selectNodeVersion
 
 
-# 3. Install npm packages in subdirectories
+# 4. Install npm packages in subdirectories in temp folder
 echo "Installing npm packages in subdirectories"
-cd $DEPLOYMENT_TARGET
+cd $DEPLOYMENT_TARGET_TEMP
 for dir in ./*
   do     
     cd $dir
@@ -122,14 +132,14 @@ for dir in ./*
       then 
         eval $NPM_CMD install
         exitWithMessageOnError "npm install failed"
-        cd $DEPLOYMENT_TARGET
+        cd $DEPLOYMENT_TARGET_TEMP
       fi
 done
 
-# 4. Run tests
+# 5. Run tests in temp folder
 echo "Running tests"
 eval $NPM_CMD  install -g mocha
-cd $DEPLOYMENT_TARGET
+cd $DEPLOYMENT_TARGET_TEMP
 for dir in ./*
   do     
     cd $dir
@@ -138,9 +148,13 @@ for dir in ./*
       then 
         eval $NPM_CMD test
         exitWithMessageOnError "npm test failed"
-        cd $DEPLOYMENT_TARGET
+        cd $DEPLOYMENT_TARGET_TEMP
       fi
 done
+
+# 6. Rename temp folder to target folder
+echo mv "$DEPLOYMENT_TARGET_TEMP" "$DEPLOYMENT_TARGET"
+mv "$DEPLOYMENT_TARGET_TEMP" "$DEPLOYMENT_TARGET"
 
 
 
